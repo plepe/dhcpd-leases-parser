@@ -1,5 +1,7 @@
 #!/usr/bin/php
 <?
+include "conf.php";
+
 $contents=file_get_contents("/var/lib/dhcp3/dhcpd.leases");
 $contents=explode("\n", $contents);
 
@@ -29,11 +31,23 @@ foreach($contents as $line) {
   }
 }
 
-$count_active=0;
+$count_active=array();
+foreach($pools as $pool_id=>$p) {
+  $count_active[$pool_id]=0;
+}
+
 foreach($data as $ip=>$d) {
   if($d['binding']=="state active") {
-    $count_active++;
+        print "$ip ";
+    foreach($pools as $pool_id=>$p) {
+      if(preg_match("/$p/", $ip)) {
+        print "y\n";
+        $count_active[$pool_id]++;
+      }
+    }
   }
 }
 
-print "$count_active\n";
+foreach($pools as $pool_id=>$p) {
+  print "{$pool_id} {$count_active[$pool_id]}\n";
+}
