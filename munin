@@ -1,0 +1,27 @@
+#!/usr/bin/php
+<?
+include "dhcpd.leases.php";
+
+$param="value";
+if(sizeof($argv)>1)
+  $param=$argv[1];
+
+switch($param) {
+  case "config":
+    print "graph_title Used dhcpd.leases\n";
+    print "graph_vlabel count\n";
+    break;
+  case "value":
+  default:
+}
+
+foreach($pools as $pool_id=>$p) {
+  switch($param) {
+    case "config":
+      print "{$pool_id}.label $pool_id\n";
+      break;
+    case "value":
+    default:
+      print "{$pool_id}.value {$count_active[$pool_id]}\n";
+  }
+}
