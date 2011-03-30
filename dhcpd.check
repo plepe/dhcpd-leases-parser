@@ -1,0 +1,32 @@
+#!/usr/bin/php
+<?
+$contents=file_get_contents("/var/lib/dhcp3/dhcpd.leases");
+$contents=explode("\n", $contents);
+
+$current=0;
+foreach($contents as $line) {
+  switch($current) {
+    case 0:
+      if(preg_match("/^\s*(|#.*)$/", $line, $m)) {
+      }
+      else if(preg_match("/^lease (.*) {/", $line, $m)) {
+        $current=$m[1];
+      }
+      else {
+        print "Failed parsing '$line'\n";
+      }
+      break;
+    default:
+      if(preg_match("/^\s*([a-z\-]+) (.*);$/", $line, $m)) {
+        $data[$current][$m[1]]=$m[2];
+      }
+      elseif(preg_match("/}/", $line, $m)) {
+        $current=0;
+      }
+      else {
+        print "Failed parsing '$line'\n";
+      }
+  }
+}
+
+print_r($data);
