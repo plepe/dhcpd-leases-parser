@@ -1,0 +1,13 @@
+#!/usr/bin/php
+<?
+include "dhcpd.leases.php";
+
+foreach($data as $ip=>$d) {
+  if($d['binding']=="state active") {
+    print "$ip: $d[hardware]";
+    if(isset($d['client-hostname'])) {
+      print " {$d['client-hostname']}";
+    }
+    print "\n";
+  }
+}
