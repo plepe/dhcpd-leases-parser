@@ -1,7 +1,7 @@
 <?
 include "conf.php";
 
-$contents=file_get_contents("/var/lib/dhcp3/dhcpd.leases");
+$contents=file_get_contents("/var/lib/dhcp/dhcpd.leases");
 $contents=explode("\n", $contents);
 
 $current=0;
