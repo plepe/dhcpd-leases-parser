@@ -13,6 +13,9 @@ foreach($contents as $line) {
       else if(preg_match("/^lease (.*) {/", $line, $m)) {
         $current=$m[1];
       }
+      else if(preg_match("/^server-duid/", $line)) {
+        // ignore
+      }
       else {
         print "Failed parsing '$line'\n";
       }
